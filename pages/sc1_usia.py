@@ -1,29 +1,11 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+from data_loader import DF_FULL
 
-# --- KONFIGURASI DAN PEMBACAAN DATA ---
-# Tentukan path file CSV secara relatif
-CSV_PATH = 'Data/heart_2022_no_nans.csv'
+df_full = DF_FULL
 
-# Fungsi untuk memuat data (menggunakan cache Streamlit agar cepat)
-@st.cache_data
-def load_data(path):
-    # Memastikan data dimuat dengan encoding yang benar
-    try:
-        df = pd.read_csv(path)
-    except FileNotFoundError:
-        st.error(f"Error: File CSV tidak ditemukan di {path}. Pastikan path sudah benar.")
-        return None
-    return df
 
-df_full = load_data(CSV_PATH)
-
-# =================================================================
-#                         STUDY CASE 1 DATA (DARI CSV)
-# =================================================================
-
-# Hanya lanjutkan jika data berhasil dimuat
 if df_full is not None:
     # 1. Menghitung Jumlah Kasus Serangan Jantung (HadHeartAttack == 'Yes') per Kelompok Usia
     df_cases = df_full[df_full['HadHeartAttack'] == 'Yes']
@@ -58,9 +40,7 @@ else:
     # Jika data gagal dimuat, buat DataFrame kosong untuk mencegah error
     df_raw_usia = pd.DataFrame(columns=['Kelompok Usia', 'Count of HadHeartAttack', 'Persentase Risiko (%)', 'Kenaikan Absolut (%)'])
 
-# --- FUNGSI VISUALISASI SC 1 (create_absolute_increase_chart, create_pie_chart) ---
 def create_absolute_increase_chart(df):
-    # ... (Tempelkan seluruh definisi fungsi create_absolute_increase_chart di sini)
     color_condition = alt.condition(
         alt.datum['Kenaikan Absolut (%)'] > 0,
         alt.value('steelblue'), 
@@ -75,7 +55,6 @@ def create_absolute_increase_chart(df):
     return chart
 
 def create_pie_chart(df):
-    # ... (Tempelkan seluruh definisi fungsi create_pie_chart di sini)
     chart = alt.Chart(df).mark_arc(outerRadius=120).encode(
         theta=alt.Theta("Persentase Risiko (%):Q", stack=True),
         color=alt.Color("Kelompok Usia:N", legend=alt.Legend(title="Kelompok Usia")),
@@ -90,8 +69,6 @@ def create_pie_chart(df):
     )
     return chart + text
 
-
-# --- FUNGSI UTAMA UNTUK DIPANGGIL OLEH main.py ---
 def show_page():
     st.header("Study Case 1: Analisis Evolusi Risiko Serangan Jantung Berdasarkan Usia")
     st.markdown("---")
@@ -108,7 +85,6 @@ def show_page():
         st.altair_chart(create_absolute_increase_chart(df_raw_usia), use_container_width=True)
     
     st.subheader("Interpretasi dan Penjelasan Detail")
-    # ... (Tempelkan seluruh st.markdown laporan SC1 di sini)
     st.markdown("""
         ### Studi kasus 1: Kelompok usia berapakah yang mengalami peningkatan risiko serangan jantung paling tinggi?
         

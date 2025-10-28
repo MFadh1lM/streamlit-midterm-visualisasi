@@ -1,20 +1,9 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+from data_loader import DF_FULL
 
-# --- KONFIGURASI DAN PEMBACAAN DATA ---
-CSV_PATH = 'Data/heart_2022_no_nans.csv'
-
-@st.cache_data
-def load_data(path):
-    try:
-        df = pd.read_csv(path)
-    except FileNotFoundError:
-        st.error(f"Error: File CSV tidak ditemukan di {path}. Pastikan path sudah benar.")
-        return None
-    return df
-
-df_full = load_data(CSV_PATH)
+df_full = DF_FULL
 
 # Fungsi pengelompokan usia yang disederhanakan
 def simplify_age(age_category):
@@ -27,11 +16,6 @@ def simplify_age(age_category):
     elif age_category == 'Age 80 or older':
         return '>=80 Tahun'
     return age_category
-
-
-# =================================================================
-#                         STUDY CASE 2 DATA (DARI CSV & DIKELOMPOKKAN)
-# =================================================================
 
 if df_full is not None:
     # 1. Filter kasus serangan jantung & Kelompokkan usia
@@ -76,10 +60,7 @@ else:
     df_male_increase = pd.DataFrame(columns=['Kelompok Usia', 'Jumlah Kasus', 'Persentase Kasus Global (%)', 'Kenaikan Absolut (%)'])
     df_female_increase = pd.DataFrame(columns=['Kelompok Usia', 'Jumlah Kasus', 'Persentase Kasus Global (%)', 'Kenaikan Absolut (%)'])
 
-
-# =================================================================
-#                       FUNGSI VISUALISASI SC 2
-# =================================================================
+# Visualisasi
 def create_gender_age_stacked_bar_chart(df):
     """Membuat Normalized Stacked Bar Chart (Proporsi 100%)"""
     
@@ -102,9 +83,6 @@ def create_gender_age_stacked_bar_chart(df):
     
     return chart_bar
 
-# =================================================================
-#                       FUNGSI RENDER SC 2
-# =================================================================
 def show_page():
     """Menampilkan konten lengkap Study Case 2: Gender vs. Usia."""
     
@@ -114,11 +92,9 @@ def show_page():
     st.header("Study Case 2: Perbandingan Risiko Serangan Jantung Berdasarkan Jenis Kelamin dan Kelompok Usia")
     st.markdown("---")
     
-    # --- BAGIAN 1: STACKED BAR CHART ---
     st.subheader("1. Proporsi Kasus Berdasarkan Gender dan Usia (Proporsi 100% per Kelompok Usia)")
     st.altair_chart(create_gender_age_stacked_bar_chart(df_gender_age_count), use_container_width=True) 
 
-    # --- BAGIAN 2: DATA KENAIKAN ABSOLUT (2 TABEL FOKUS) ---
     st.subheader("2. Analisis Kenaikan Absolut Risiko Antar Kelompok Usia")
     st.info("Tabel ini menunjukkan total kasus, persentase global, dan percepatan risiko per gender.")
     
@@ -131,8 +107,6 @@ def show_page():
     with col_female_table:
         st.caption("**:orange[Perempuan (Female)]**")
         st.dataframe(df_female_increase, hide_index=True)
-
-    # Catatan: Tabel Rincian Lama Dihapus
 
     st.subheader("3. Interpretasi dan Penjelasan Detail")
     st.markdown("""

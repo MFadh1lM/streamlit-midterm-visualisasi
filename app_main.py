@@ -2,13 +2,11 @@ import streamlit as st
 # Import fungsi show_page dari setiap file study case
 from pages import sc1_usia, sc2_gender_usia, sc3_sleep_hours, sc4_covid_risk, sc5_alcohol_risk, sc6_smoking, sc7_regional_map, sc8_physical_activity, sc9_diabetes_risk, sc10_stroke_risk
 
-# --- KONFIGURASI APLIKASI ---
 st.set_page_config(
     page_title="Visualisasi Data Midterm",
     layout="wide"
 )
 
-# --- STRUKTUR UTAMA APLIKASI STREAMLIT ---
 def main():
     
     # 1. Definisikan Struktur Navigasi (PAGES)

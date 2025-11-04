@@ -1,6 +1,6 @@
 import streamlit as st
 # Import fungsi show_page dari setiap file study case
-from pages import sc1_usia, sc2_gender_usia, sc3_sleep_hours, sc4_covid_risk, sc5_alcohol_risk, sc6_smoking, sc7_regional_map, sc8_physical_activity, sc9_diabetes_risk, sc10_stroke_risk
+from pages import sc1_usia, sc2_gender_usia, sc3_sleep_hours, sc4_covid_risk, sc5_alcohol_risk, sc6_smoking, sc7_regional_map, sc8_physical_activity, sc9_diabetes_risk, sc10_stroke_risk, dataset_info
 
 st.set_page_config(
     page_title="Visualisasi Data Midterm",
@@ -11,6 +11,7 @@ def main():
     
     # 1. Definisikan Struktur Navigasi (PAGES)
     PAGES = {
+        "Deskripsi Dataset": dataset_info,
         "1. Usia": sc1_usia,
         "2. Rasio Gender vs Usia": sc2_gender_usia,
         "3. Durasi Tidur": sc3_sleep_hours,
@@ -62,7 +63,7 @@ def main():
             """
             * **Link GitHub:** `https://github.com/MFadh1lM/streamlit-midterm-visualisasi`
             * **Link Live Preview (Streamlit Cloud):** `https://app-midterm-visualisasi-jujvzgnxaslzrarxmptivj.streamlit.app/`
-            * **Laporan Analisis:** `https://colab.research.google.com/drive/1D1JgfEn_R8FhZ80nrCJ79uEEiSnn2NFU?usp=sharing`
+            * **Laporan Analisis:** `https://docs.google.com/document/d/1ApN4mwCFbz9GGXHlWIwq47UXDWwjtNvqxAhaj2AhbF4/edit?usp=sharing`
             """
         )
         st.markdown("---")

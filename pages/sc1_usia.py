@@ -84,17 +84,33 @@ def show_page():
         st.subheader("Visualisasi Kenaikan Absolut Risiko")
         st.altair_chart(create_absolute_increase_chart(df_raw_usia), use_container_width=True)
     
-    st.subheader("Interpretasi dan Penjelasan Detail")
+    st.subheader("Interpretasi dan Kesimpulan")
     st.markdown("""
-        ### Studi kasus 1: Kelompok usia berapakah yang mengalami peningkatan risiko serangan jantung paling tinggi?
-        
-        1.  **Risiko dasar dan kenaikan lambat dimulai dari usia 18 - 44 tahun:** Ini adalah periode risiko rendah di mana persentase risiko total berada di bawah $2\%$ dan kecepatan penambahan risiko (Kenaikan Absolut) sangat lambat.
-        2.  **Percepatan risiko dan titik kritis dimulai dari usia 45-69 tahun:** Ini adalah fase berbahaya di mana risiko berakselerasi secara dramatis. Kenaikan absolut risiko melonjak dari $0,54\%$ menjadi puncaknya di $4,32\%$.
-        3.  **Risiko total tertinggi dan fenomena "Survivor Bias" di usia $\ge 70$ tahun:** Risiko total tertinggi ada di kelompok usia $80$ tahun atau lebih yang mencatat persentase risiko total tertinggi ($18,06\%$). Lalu terdapat penurunan kenaikan absolut yang signifikan ($-2,55\%$) pada usia $75-79$ tahun yang mengindikasikan seleksi penyintas (*survivor bias*) yaitu individu yang sangat rentan, atau telah menderita komplikasi parah kemungkinan besar telah meninggal sebelum mencapai usia $75$, meninggalkan populasi yang tersisa yang secara relatif lebih tangguh dan sehat.
-        
+        ### Studi Kasus 1: Kelompok usia berapakah yang mengalami peningkatan risiko serangan jantung paling tinggi?
+
+        1. **Usia muda hingga 44 tahun (risiko dasar rendah):**  
+        Risiko serangan jantung masih sangat rendah pada kelompok ini, dengan persentase total di bawah **2%**.  
+        Peningkatan dari satu kelompok usia ke kelompok berikutnya masih relatif kecil dan stabil.
+
+        2. **Usia 45–69 tahun (fase percepatan risiko):**  
+        Mulai usia **45 tahun**, laju kenaikan risiko meningkat secara tajam.  
+        Kenaikan absolut mencapai puncaknya pada kelompok **65–69 tahun**, menandakan periode di mana faktor usia mulai memberi dampak paling besar terhadap kemungkinan serangan jantung.
+
+        3. **Usia ≥70 tahun (fase stabil dengan risiko tinggi):**  
+        Setelah usia 70 tahun, risiko total tetap tinggi, tetapi kenaikan absolut mulai menurun.  
+        Hal ini dapat diartikan sebagai efek **plateau**, di mana sebagian besar individu berisiko tinggi sudah termasuk dalam kelompok usia sebelumnya.
+
+        ### Rumus Persentase Risiko Global
+    """)
+    
+    st.latex(r"""
+        P(\text{Risiko Usia}_i) = \frac{\text{Jumlah Kasus Usia}_i}{\text{Total Kasus}} \times 100
+    """)
+
+    st.markdown("""
         ### Kesimpulan
-        1.  **Masa tenang:** Risiko serangan jantung absolut bertambah sangat lambat hingga usia $44$ tahun.
-        2.  **Periode peringatan (Akselerasi Risiko):** Percepatan risiko yang signifikan dan berbahaya dimulai di usia $45-49$ tahun dan berpuncak pada usia $65-69$ tahun.
-        3.  **Risiko puncak absolut:** Persentase risiko tertinggi secara keseluruhan ada pada kelompok $80$ tahun atau lebih ($18,06\%$).
-        4.  **Implikasi medis:** Intervensi klinis dan perubahan gaya hidup harus mulai diterapkan pada usia pertengahan ($40$an) untuk meminimalkan percepatan risiko yang akan terjadi secara cepat pada dua dekade berikutnya.
+        1. **Masa tenang (usia <45 tahun):** Risiko serangan jantung bertambah sangat lambat hingga usia pertengahan.  
+        2. **Fase percepatan (usia 45–69 tahun):** Periode paling kritis di mana risiko meningkat paling tajam dan signifikan.  
+        3. **Fase penurunan (≥70 tahun):** Risiko tetap tinggi, namun tidak lagi bertambah secepat fase sebelumnya.  
+        4. **Implikasi:** Upaya pencegahan sebaiknya dimulai sejak usia 40-an agar tidak memasuki fase percepatan risiko tanpa persiapan gaya hidup dan pemeriksaan rutin.
     """)

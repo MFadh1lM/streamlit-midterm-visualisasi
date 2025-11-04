@@ -61,7 +61,7 @@ def show_page():
     st.markdown("---")
 
     # 1️ Visualisasi Bubble Chart
-    st.subheader("1. Visualisasi Interaktif (Bubble Chart)")
+    st.subheader("1. Visualisasi Bubble Chart")
     st.info("Bubble Chart ini menggambarkan hubungan antara status merokok, kebiasaan konsumsi alkohol, dan rasio kejadian serangan jantung. Ukuran dan warna gelembung mewakili tingkat risiko yang lebih tinggi.")
     st.altair_chart(create_bubble_chart(df_alcohol_risk), use_container_width=True)
 
@@ -73,26 +73,49 @@ def show_page():
     # 3️ Kesimpulan dan Analisis
     st.subheader("3. Interpretasi dan Kesimpulan")
     st.markdown("""
-    ### **Analisis Interaksi Risiko**
-    Dari visualisasi di atas, terlihat pola yang menarik:
+        ### **Analisis Interaksi Risiko**
+        Berdasarkan tabel dan visualisasi di atas, dapat diamati beberapa pola penting mengenai hubungan antara **kebiasaan merokok**, **konsumsi alkohol**, dan **risiko serangan jantung**:
 
-    1. **Perokok aktif (Current Smoker)** tetap memiliki **rasio serangan jantung tertinggi**, menunjukkan bahwa merokok adalah faktor risiko dominan.
-    2. Namun, pada kelompok perokok aktif, individu yang **tidak mengonsumsi alkohol** justru memiliki rasio serangan jantung **lebih tinggi (sekitar 10%)** dibandingkan peminum alkohol **(sekitar 5–6%)**.
-    3. Pola serupa juga tampak pada kelompok **mantan perokok (Former Smoker)**, di mana peminum alkohol memiliki rasio sedikit lebih rendah.
-    4. Pada kelompok **tidak pernah merokok (Never Smoked)**, perbedaan antara peminum dan bukan peminum relatif kecil.
+        1. **Kelompok perokok aktif (Current Smoker)** yang **tidak mengonsumsi alkohol** memiliki **rasio serangan jantung tertinggi**, yaitu sekitar **10.36%**.
+        2. Menariknya, **mantan perokok (Former Smoker)** tanpa alkohol bahkan memiliki rasio sedikit **lebih tinggi (11.07%)** dibanding perokok aktif tanpa alkohol.  
+        Ini bisa menunjukkan bahwa efek risiko merokok masih bertahan lama bahkan setelah berhenti.
+        3. Pada kelompok yang **mengonsumsi alkohol**, rasio insiden lebih **rendah secara konsisten** di semua kategori perokok — contohnya hanya **5.77% pada perokok aktif** dan **6.04% pada mantan perokok**.
+        4. Kelompok **tidak pernah merokok (Never Smoked)** tetap memiliki risiko paling rendah, dengan rasio **sekitar 2.55–5.08%**, tergantung konsumsi alkohol.
 
-    Hasil ini tampak bertolak belakang dengan dugaan umum bahwa konsumsi alkohol selalu meningkatkan risiko penyakit jantung.  
-    Beberapa kemungkinan penyebabnya antara lain:
-
-    - **Bias Gaya Hidup:** Peminum ringan (moderate drinkers) seringkali memiliki pola sosial dan aktivitas fisik yang lebih baik.
-    - **Variabel Perancu:** Faktor lain seperti usia, tekanan darah, dan berat badan tidak dikontrol pada analisis ini.
-    - **Efek Moderasi:** Alkohol mungkin berinteraksi dengan faktor risiko lain (misalnya rokok) dengan cara yang tidak linier.
-
-    ---
-
-    ### **Kesimpulan Akhir**
-    Berdasarkan hasil visualisasi, **status merokok tetap menjadi faktor risiko utama serangan jantung**.  
-    Namun, **pengaruh konsumsi alkohol** tidak menunjukkan peningkatan risiko yang konsisten.  
-    Sebaliknya, data ini mengindikasikan bahwa **perokok non-peminum alkohol memiliki risiko sedikit lebih tinggi**, menandakan hubungan antara alkohol dan penyakit jantung **tidak sederhana dan dipengaruhi banyak faktor**.
+        ---
+        ### **Rumus Perhitungan Rasio Insiden**
     """)
+
+    st.latex(r"""
+        ext{Rasio Insiden (\%)} = 
+        \frac{\text{Jumlah Kasus Serangan Jantung}}{\text{Total Populasi}} \times 100
+    """)
+
+    st.markdown("""
+        Contoh perhitungan untuk kelompok *Current Smoker tanpa alkohol*:
+    """)
+
+    st.latex(r"""
+        \frac{1438}{13875} \times 100 = 10.36\%
+    """)
+
+    st.markdown("""
+        ---
+        ### **Interpretasi Lanjutan**
+        Hasil ini memberikan gambaran bahwa:
+        - **Merokok tetap menjadi faktor risiko dominan** terhadap serangan jantung, bahkan setelah berhenti merokok.
+        - **Konsumsi alkohol tidak selalu meningkatkan risiko**; pada beberapa kelompok justru terlihat sedikit menurunkan rasio insiden.  
+        Namun, hal ini **tidak dapat diartikan sebagai efek protektif**, karena bisa dipengaruhi oleh:
+            - Perbedaan usia dan kesehatan umum antar kelompok.
+            - Perilaku hidup lain seperti olahraga dan pola makan.
+            - Bias pelaporan dalam survei (underreporting konsumsi alkohol).
+
+        ---
+        ### **Kesimpulan Akhir**
+        1. **Mantan perokok tanpa alkohol memiliki rasio serangan jantung tertinggi (11.07%)**, disusul perokok aktif tanpa alkohol (10.36%).  
+        2. **Konsumsi alkohol tampak berkorelasi dengan penurunan rasio insiden**, namun efek ini kemungkinan dipengaruhi faktor lain.
+        3. Secara keseluruhan, **merokok—baik aktif maupun riwayat sebelumnya—tetap merupakan faktor risiko paling kuat terhadap penyakit jantung**.  
+        4. Temuan ini menegaskan pentingnya **intervensi berhenti merokok dan promosi gaya hidup sehat** sebagai strategi pencegahan utama.
+    """)
+
 

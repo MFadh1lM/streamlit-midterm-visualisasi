@@ -129,16 +129,40 @@ def show_page():
     
     # 4. Interpretasi dan Penjelasan Detail
     st.subheader("4. Interpretasi dan Kesimpulan")
-    
+
     st.markdown("""
-        ### Analisis Beban Kasus Absolut:
-        Visualisasi ini mengukur **beban total kasus** serangan jantung yang disumbangkan oleh setiap negara bagian ke dalam *dataset*.
-        
-        #### Temuan Kunci (Beban Kasus):
-        1.  **Penyumbang Dominan (Donut Chart):** Diagram Donut secara jelas menunjukkan persentase kontribusi setiap negara bagian. **Washington, Ohio, Florida, dan Texas** akan menyumbang persentase terbesar.
-        2.  **Visualisasi Peta:** Peta Choropleth secara intuitif menunjukkan di mana kasus-kasus tersebut **terkonsentrasi** secara geografis (warna tergelap).
-        
-        ### Kesimpulan
-        * Peta dan bagan ini adalah alat yang efektif untuk mengidentifikasi **pusat konsentrasi kasus (beban kasus)**.
-        * **Penting:** Hasil ini menunjukkan kontribusi volume data, bukan **risiko individu tertinggi** (Insiden per kapita).
+        ### Analisis Beban Kasus Absolut per Negara Bagian
+
+        Visualisasi ini menampilkan distribusi jumlah **kasus serangan jantung absolut** di seluruh negara bagian Amerika Serikat.  
+        Data ini menunjukkan **volume total kasus yang dilaporkan**, bukan tingkat risiko per individu.
+
+        #### Temuan Kunci
+
+        1. **Dominasi Kasus Regional:**  
+        Berdasarkan *Donut Chart*, beberapa negara bagian seperti **Washington, Ohio, Florida, dan Texas** muncul sebagai penyumbang terbesar kasus serangan jantung secara absolut.  
+        Hal ini berarti bahwa wilayah-wilayah tersebut memiliki **jumlah kasus terbanyak**, bukan berarti warganya memiliki risiko tertinggi.
+
+        2. **Konsentrasi Geografis (Peta Choropleth):**  
+        Warna yang lebih gelap pada peta menunjukkan wilayah dengan jumlah kasus tertinggi.  
+        Pola ini membantu mengidentifikasi **cluster geografis** — misalnya bagian Tenggara dan Timur AS yang cenderung lebih padat kasus.
+
+        3. **Kontribusi Terhadap Total Dataset:**  
+        Sepuluh negara bagian teratas menyumbang lebih dari separuh total kasus dalam dataset, menunjukkan **distribusi yang tidak merata** antar wilayah.
+
+        ---
+
+        - **Interpretasi:**  
+        Peta ini mengukur **beban penyakit (disease burden)**, bukan **tingkat risiko (incidence rate)**.  
+        Jadi, wilayah dengan populasi besar atau responden lebih banyak akan tampak lebih dominan.
+
+        - **Kemungkinan Faktor Penyebab Perbedaan Regional:**  
+        *Variasi gaya hidup, prevalensi faktor risiko (seperti obesitas, rokok, dan tekanan darah tinggi), serta ketersediaan layanan kesehatan* dapat menjelaskan perbedaan antar wilayah.
+
+        ---
+
+        ### Kesimpulan Akhir
+
+        - Peta dan diagram menunjukkan bahwa **beban absolut kasus serangan jantung tidak merata antar wilayah AS**, dengan konsentrasi di beberapa negara bagian besar seperti **Texas, Florida, dan Ohio**.  
+        - Visualisasi ini berguna untuk **prioritas sumber daya kesehatan masyarakat** di wilayah dengan beban tinggi.  
+        - Namun, untuk memahami **risiko sebenarnya**, diperlukan analisis tambahan menggunakan **rasio insiden per kapita atau tingkat prevalensi per 100.000 penduduk.**
     """)

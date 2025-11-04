@@ -58,36 +58,33 @@ def show_page():
     
     # 3. Interpretasi dan Penjelasan Detail
     st.subheader("3. Interpretasi dan Kesimpulan")
-    
+
     st.markdown("""
         ### Analisis Perbandingan: Kasus Absolut vs. Rasio Insiden
-        
-        Data absolut (tanpa normalisasi) menunjukkan bahwa kasus serangan jantung lebih banyak terjadi pada kelompok **Aktif Secara Fisik** ($8.514$ kasus) dibandingkan dengan yang **Tidak Aktif** ($4.921$ kasus). Ini adalah hasil yang kontradiktif.
-        
-        #### Temuan Kunci (Rasio Insiden):
-        
-        1.  **Risiko Relatif:** Rasio Insiden (yang didefinisikan di bawah) yang ditampilkan pada Bar Plot adalah metrik risiko yang benar setelah dinormalisasi terhadap populasi setiap kelompok.
+
+        Data absolut menunjukkan bahwa jumlah kasus serangan jantung lebih banyak terjadi pada kelompok **Aktif Secara Fisik** (≈8.514 kasus) dibandingkan dengan kelompok **Tidak Aktif Secara Fisik** (≈4.921 kasus). Namun, nilai absolut ini **tidak memperhitungkan perbedaan jumlah populasi** di tiap kelompok.
+
+        #### Temuan Kunci: Rasio Insiden
+        Rasio insiden digunakan untuk menilai **risiko relatif** dengan menormalkan jumlah kasus terhadap total populasi tiap kelompok, menggunakan rumus:
+
     """)
-    
-    # <<< GUNAKAN st.latex() UNTUK RUMUS RUMIT >>>
     st.latex(r"""
-        \text{Rasio Insiden} = \frac{\text{Kasus}}{\text{Total Populasi}}
+        \text{Rasio Insiden} = \frac{\text{Jumlah Kasus Serangan Jantung}}{\text{Total Populasi Kelompok}} \times 100
     """)
-    # <<< AKHIR st.latex() >>>
 
     st.markdown("""
-        2.  **Koreksi Asumsi:** Jika ternyata Rasio Insiden untuk kelompok **Aktif Secara Fisik** tidak jauh berbeda, ini menguatkan bahwa aktivitas fisik yang dilaporkan mungkin **tidak cukup intens** atau **terdapat bias data/pelaporan** (misalnya, responden yang sakit baru mulai aktif).
+        Dari hasil perhitungan:
+        - **Kelompok Tidak Aktif Secara Fisik** memiliki rasio insiden lebih tinggi dibandingkan kelompok aktif.  
+        - Ini menunjukkan bahwa **aktivitas fisik masih berperan sebagai faktor protektif terhadap risiko penyakit jantung**, walaupun jumlah kasus absolut tampak lebih tinggi pada kelompok aktif (karena populasi aktif lebih besar).
 
-        ### Kesimpulan:
-        
-        **1. Sebagian besar responden yang mengalami serangan jantung berasal dari kelompok yang melaporkan dirinya aktif secara fisik.**
-        
-        **2. Temuan ini tampak kontradiktif dengan asumsi umum, karena seharusnya aktivitas fisik berperan melindungi jantung.**
-        
-        **3. Alasan Kontradiksi:**
-        * Data "aktif secara fisik" mungkin hanya menggambarkan **aktivitas ringan atau tidak teratur** yang tidak cukup untuk proteksi jantung.
-        * Responden aktif mungkin sudah memiliki **risiko jantung/usia lanjut** yang lebih tinggi (bias).
-        * Ada kemungkinan **bias pelaporan** — individu yang sakit mulai aktif setelah kejadian.
-        
-        **Kesimpulan Akhir:** Aktivitas fisik saja tidak cukup; pencegahan penyakit jantung harus dilakukan secara **menyeluruh** dengan mengelola faktor risiko lain (usia, merokok, stres) dan pemeriksaan kesehatan rutin.
+        ### Interpretasi Tambahan
+        1. **Perbedaan populasi** sangat berpengaruh — lebih banyak orang aktif secara fisik dalam dataset, sehingga jumlah kasus absolut mereka juga lebih tinggi.  
+        2. **Rasio insiden** memberi gambaran risiko yang sebenarnya: proporsi orang aktif yang terkena serangan jantung lebih kecil daripada yang tidak aktif.  
+        3. **Kualitas aktivitas fisik** juga berperan — aktivitas ringan atau tidak rutin mungkin tidak cukup memberikan efek protektif yang kuat.  
+        4. Terdapat potensi **bias pelaporan** — responden yang sudah memiliki riwayat penyakit jantung bisa mulai lebih aktif setelah sakit (reverse causality).
+
+        ### Kesimpulan Akhir
+        - **Secara proporsional**, individu yang **tidak aktif secara fisik** memiliki **risiko serangan jantung lebih tinggi**.  
+        - **Aktivitas fisik** tetap terbukti memiliki efek protektif, tetapi efektivitasnya dapat bervariasi tergantung intensitas dan konsistensinya.  
+        - Pencegahan penyakit jantung perlu bersifat **komprehensif**, mencakup gaya hidup aktif, diet sehat, kontrol stres, dan pemeriksaan medis rutin.
     """)

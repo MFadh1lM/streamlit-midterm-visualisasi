@@ -79,27 +79,24 @@ def show_page():
     st.subheader("3. Interpretasi dan Kesimpulan")
     
     st.markdown("""
-        ### Analisis Interaksi Risiko (Berdasarkan Data Aktual):
+        ### Analisis Interaksi Risiko:
         Analisis ini membandingkan Rasio Insiden untuk mengukur risiko per kapita.
     """)
     
     # Menggunakan st.latex() untuk menampilkan rumus dengan format yang benar
     st.latex(r"""
-        \text{Rasio Insiden} = \frac{\text{Kasus Serangan Jantung}}{\text{Total Populasi}}
+        \text{Rasio Insiden} = \frac{\text{Kasus Serangan Jantung}}{\text{Total Populasi}} \times 100
     """)
 
 
     st.markdown("""
-        #### Temuan Kunci Baru:
-        1.  **Risiko Puncak Mutlak:** Rasio Insiden tertinggi ($ \mathbf{9.14\%} $) berada pada kelompok **Perokok Harian Saat Ini** yang **TIDAK PERNAH menggunakan rokok elektrik dalam hidupnya**.
-        2.  **Former Smoker Risiko Tinggi:** Kelompok **Former Smoker** yang **Tidak Pernah Menggunakan Vape** juga menunjukkan risiko yang sangat tinggi ($ \mathbf{8.94\%} $), hampir menyamai risiko puncak.
-        3.  **Efek Vape yang Tidak Jelas:** Pada kelompok perokok harian, rasio insiden justru **lebih rendah** pada pengguna vape (*Use them every day* $\mathbf{7.76\%}$) dibandingkan non-pengguna vape ($ \mathbf{9.14\%} $). Ini menguatkan kesimpulan bahwa hubungan antara rokok elektrik dan serangan jantung tidak linier dan dipengaruhi bias data yang kuat.
-
-        #### Interpretasi:
-        * **Faktor Merokok Tradisional Dominan:** Terbukti bahwa risiko serangan jantung tertinggi terkonsentrasi pada kelompok yang **merokok secara tradisional** (aktif atau mantan).
-        * **Bias Sub-Populasi:** Hasil ini menunjukkan adanya **Bias Data** di mana kategori `Never used e-cigarettes in my entire life` pada perokok aktif mungkin mencakup perokok yang lebih tua atau memiliki kondisi kronis lainnya yang tidak diukur, sementara populasi pengguna vape yang tersisa (terutama yang berusia muda) memiliki risiko yang lebih rendah. Ini membuktikan bahwa **Rokok Tradisional adalah bahaya utama**, dan penafsiran tentang vape harus dilakukan dengan hati-hati.
+        ### Interpretasi:
+        * **Faktor Merokok Tradisional Dominan:** Risiko serangan jantung tertinggi terjadi pada kelompok yang **merokok secara aktif maupun mantan perokok**.
+        * **Pengaruh Vape Tidak Linier:** Penggunaan vape tampak tidak selalu meningkatkan risiko secara langsung — hal ini mungkin dipengaruhi oleh faktor usia, perilaku kesehatan lain, atau bias pengisian survei.
+        * **Keterbatasan Analisis:** Studi ini bersifat observasional dan tidak membuktikan hubungan sebab-akibat (*causality*), melainkan menunjukkan pola asosiasi.
 
         ### Kesimpulan
-        * **Faktor Merokok Tradisional adalah pendorong risiko utama.** Kelompok yang pernah merokok (aktif/mantan) menunjukkan risiko jauh lebih tinggi daripada **Never Smoked** ($ \mathbf{3.87\%} $).
-        * **Pola Risiko:** Risiko terkonsentrasi pada perokok harian yang tidak beralih ke vape dan mantan perokok, menekankan bahaya dari paparan rokok tradisional jangka panjang.
+        * **Rokok tradisional tetap menjadi faktor risiko utama serangan jantung.** Mantan perokok dan perokok aktif menunjukkan risiko yang jauh lebih tinggi dibandingkan individu yang tidak pernah merokok.
+        * **Efek rokok elektrik masih belum konsisten.** Walaupun beberapa kelompok pengguna vape menunjukkan rasio insiden lebih rendah, hal ini kemungkinan besar dipengaruhi oleh perbedaan karakteristik demografis dan kesehatan populasi.
+        * Temuan ini menegaskan pentingnya **pengendalian kebiasaan merokok tradisional** sebagai prioritas utama dalam pencegahan penyakit jantung.
     """)

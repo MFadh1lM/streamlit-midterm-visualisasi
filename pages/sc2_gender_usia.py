@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import plotly.express as px
 from data_loader import DF_FULL
 
 df_full = DF_FULL
@@ -83,6 +84,69 @@ def create_gender_age_stacked_bar_chart(df):
     
     return chart_bar
 
+# --- 3A. Chart Persentase Kasus Global per Gender ---
+def create_global_percentage_chart(df_male, df_female):
+    df_male['Jenis Kelamin'] = 'Male'
+    df_female['Jenis Kelamin'] = 'Female'
+    df_combined = pd.concat([df_male, df_female])
+    
+    simple_age_order = ['<45 Tahun', '45-64 Tahun', '65-79 Tahun', '>=80 Tahun']
+    color_scale = alt.Scale(domain=['Male', 'Female'], range=['#1f77b4', '#ff7f0e'])
+    
+    chart = alt.Chart(df_combined).mark_line(point=True).encode(
+        x=alt.X('Kelompok Usia:N', sort=simple_age_order, title='Kelompok Usia'),
+        y=alt.Y('Persentase Kasus Global (%):Q', title='Persentase dari Total Kasus Global'),
+        color=alt.Color('Jenis Kelamin:N', scale=color_scale),
+        tooltip=['Jenis Kelamin', 'Kelompok Usia', 'Persentase Kasus Global (%)']
+    ).properties(
+        title='Persentase Kasus Serangan Jantung per Kelompok Usia (Global)',
+        height=300
+    )
+    return chart
+
+
+# --- 3B. Chart Kenaikan Absolut Risiko per Gender ---
+def create_absolute_increase_chart(df_male, df_female):
+    """Membuat Grouped Bar Chart Interaktif Plotly untuk Kenaikan Absolut Risiko per Gender."""
+    
+    # 1. Gabungkan data
+    df_combined = pd.concat([df_male, df_female])
+    
+    simple_age_order = ['<45 Tahun', '45-64 Tahun', '65-79 Tahun', '>=80 Tahun']
+    
+    # 2. Buat Plotly Chart
+    fig = px.bar(
+        df_combined,
+        x='Kelompok Usia', 
+        y='Kenaikan Absolut (%)', 
+        color='Jenis Kelamin', # Variabel untuk mengelompokkan
+        barmode='group',        # Mode grouping (batang berdampingan)
+        text_auto='.2f',        # Menambahkan label teks di atas batang
+        category_orders={"Kelompok Usia": simple_age_order},
+        labels={
+            "Jenis Kelamin": "Jenis Kelamin", 
+            "Kenaikan Absolut (%)": "Kenaikan Absolut Risiko (%)"
+        },
+        title="Kenaikan Absolut Risiko Serangan Jantung Antar Kelompok Usia"
+    )
+
+    # 3. Perbaiki Layout
+    fig.update_traces(textposition='outside')
+    fig.update_layout(xaxis_title="Kelompok Usia", 
+                      yaxis_title="Kenaikan Absolut Risiko (%)",
+                      # Menambahkan garis nol untuk membedakan kenaikan/penurunan
+                      shapes=[
+                          dict(
+                            type='line',
+                            yref='y', y0=0, y1=0,
+                            xref='paper', x0=0, x1=1,
+                            line=dict(color='Red', width=1, dash='dot')
+                          )
+                      ],
+                      legend_title="Jenis Kelamin")
+    
+    return fig
+
 def show_page():
     """Menampilkan konten lengkap Study Case 2: Gender vs. Usia."""
     
@@ -108,22 +172,45 @@ def show_page():
         st.caption("**:orange[Perempuan (Female)]**")
         st.dataframe(df_female_increase, hide_index=True)
 
-    st.subheader("3. Interpretasi dan Penjelasan Detail")
-    st.markdown("""
-        ### Studi kasus 2: Apakah proporsi risiko serangan jantung pada perempuan selalu lebih rendah daripada laki-laki di setiap fase usia?
-        
-        #### Analisis Proporsi (Stacked Chart):
-        Visualisasi ini menunjukkan **proporsi kasus serangan jantung** di dalam setiap kelompok usia (total $100\%$ per bar).
-        
-        1.  **Dominasi Awal (<45 Tahun):** Proporsi kasus pada Laki-laki sangat signifikan (sekitar $\mathbf{60\%}$), menegaskan perlindungan hormonal Estrogen pada perempuan di usia reproduktif.
-        2.  **Kesenjangan Menyempit (45-64 Tahun):** Proporsi Perempuan mulai meningkat tajam. Ini adalah periode kritis yang bertepatan dengan hilangnya perlindungan hormonal (menopause).
-        3.  **Proporsi Tinggi di Usia Lanjut (>=80 Tahun):** Proporsi Perempuan tetap tinggi (mendekati $\mathbf{40\%}$ dari total kasus di kelompok usia tersebut), menunjukkan bahwa di usia sangat tua, Perempuan membentuk bagian kasus yang sangat substansial.
+    st.subheader("3. Tren Global dan Kenaikan Risiko per Gender")
 
-        #### Analisis Kenaikan Absolut (Tabel):
-        Tabel ini menunjukkan percepatan risiko absolut global di setiap transisi fase usia.
-        1.  **Titik Percepatan Kritis:** Kenaikan absolut tertinggi untuk **kedua gender** terjadi pada transisi usia **45-64 Tahun** dan **65-79 Tahun**. Usia paruh baya (45-64) dan awal usia lanjut (65-79) adalah fase percepatan risiko paling dramatis bagi kedua gender.
-        
+    st.altair_chart(create_global_percentage_chart(df_male_increase, df_female_increase), use_container_width=True)
+    st.plotly_chart(create_absolute_increase_chart(df_male_increase, df_female_increase), use_container_width=True)
+
+    st.subheader("4. Interpretasi dan Kesimpulan")
+    st.markdown("""
+        ### Studi Kasus 2: Apakah proporsi risiko serangan jantung pada perempuan selalu lebih rendah daripada laki-laki di setiap fase usia?
+
+        #### Analisis Proporsi (Stacked Chart)
+        Visualisasi ini memperlihatkan **proporsi kasus serangan jantung** di dalam setiap kelompok usia (total $100\\%$ per bar). Artinya, semakin besar bagian warna dalam bar, semakin besar kontribusi kelompok gender tersebut terhadap total kasus di usia tersebut.
+
+        1. **Dominasi Awal (<45 Tahun):** Proporsi kasus pada laki-laki jauh lebih tinggi (sekitar **60%**), mengindikasikan bahwa pada usia muda risiko lebih banyak muncul pada laki-laki.
+        2. **Penurunan Proporsi Perempuan (45–79 Tahun):** Pada rentang usia paruh baya hingga awal lanjut, proporsi perempuan justru menurun. Hal ini mengindikasikan bahwa peningkatan kasus pada laki-laki lebih tajam di fase ini.
+        3. **Usia Lanjut (≥80 Tahun):** Proporsi perempuan tetap tinggi (mencapai sekitar **40%** dari total kasus pada kelompok usia tersebut), yang menandakan bahwa di usia sangat lanjut, perempuan menjadi bagian signifikan dari keseluruhan kasus.
+
+        #### Analisis Kenaikan Absolut (Tabel)
+        Tabel menampilkan perubahan atau **kenaikan absolut risiko global** antar kelompok usia.
+
+        1. **Titik Percepatan Kritis:** Kenaikan absolut tertinggi pada **kedua gender** terjadi saat transisi dari usia **45–64 tahun** ke **65–79 tahun**.
+        2. **Makna Tren:** Ini mengindikasikan percepatan peningkatan risiko pada masa paruh baya menuju usia lanjut.
+
+        #### Analisis Persentase Kasus Global
+        Persentase kasus global dihitung untuk melihat kontribusi setiap kelompok usia terhadap total keseluruhan kasus pada skala global.
+
+    """)
+
+    st.latex(r"""
+        \text{Persentase Kasus Global} = 
+        \frac{\text{Jumlah Kasus per Kelompok Usia}}{\text{Total Seluruh Kasus}} \times 100
+    """)
+
+    st.markdown("""
+        Visualisasi ini membantu menunjukkan bahwa meskipun kasus pada kelompok usia muda relatif kecil, kontribusinya terhadap total global meningkat drastis seiring bertambahnya usia, terutama di kelompok **45–79 tahun**.
+
+        ---
+
         ### Kesimpulan
-        * **Proporsi Risiko Perempuan Meningkat Tajam:** Proporsi kasus pada Perempuan meningkat signifikan setelah usia 45 tahun.
-        * **Fase Kritis:** Usia **45-64 Tahun** dan **65-79 Tahun** adalah fase yang paling penting untuk intervensi preventif pada kedua gender, karena mengalami percepatan risiko absolut terbesar.
+        * **Proporsi Risiko Perempuan Meningkat:** Setelah usia 45 tahun, proporsi kasus pada perempuan naik signifikan dan perbedaannya dengan laki-laki makin kecil.  
+        * **Fase Kritis untuk Pencegahan:** Usia **45–64 tahun** dan **65–79 tahun** merupakan periode dengan kenaikan risiko paling tajam bagi kedua gender.  
+        * **Implikasi Umum:** Peningkatan kasus global dan rasio antar gender menunjukkan bahwa upaya pencegahan perlu difokuskan pada usia paruh baya untuk menghambat peningkatan kasus di usia lanjut.
     """)

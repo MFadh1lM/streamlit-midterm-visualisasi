@@ -34,7 +34,7 @@ def create_bar_chart(df):
     chart = alt.Chart(df).mark_bar().encode(
         x=alt.X('Riwayat Stroke:N', sort=stroke_order, title='Riwayat Stroke'),
         y=alt.Y('Count_of_HadHeartAttack:Q', title='Jumlah Kasus Absolut'),
-        color=alt.Color('Riwayat Stroke:N', title='Riwayat Stroke', scale=alt.Scale(range=['#3182bd', '#9ecae1'])),
+        color=alt.Color('Riwayat Stroke:N', title='Riwayat Stroke', scale=alt.Scale(range=['#B22222', '#FFD700'])),
         tooltip=['Riwayat Stroke', 'Count_of_HadHeartAttack', 'Proporsi_Kasus (%)']
     ).properties(
         title='Beban Kasus Serangan Jantung Absolut'
@@ -57,7 +57,7 @@ def create_lollipop_chart(df):
     points = alt.Chart(df).mark_circle(size=200).encode(
         x='Rasio_Insiden (%):Q',
         y=alt.Y('Riwayat Stroke:N', sort=stroke_order),
-        color=alt.Color('Riwayat Stroke:N', legend=None),
+        color=alt.Color('Riwayat Stroke:N', legend=None, scale=alt.Scale(range=['#B22222', '#FFD700'])),
         tooltip=['Riwayat Stroke', alt.Tooltip('Rasio_Insiden (%)', format='.2f')]
     ).properties(
         title='Risiko Relatif (Rasio Insiden %)'

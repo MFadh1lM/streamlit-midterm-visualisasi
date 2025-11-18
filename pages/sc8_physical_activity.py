@@ -25,19 +25,40 @@ if DF_FULL is not None:
 else:
     df_activity_risk = pd.DataFrame(columns=['PhysicalActivities', 'Total_Population', 'Case_Count', 'Incidence_Ratio (%)'])
 
+# --- FUNGSI BARU UNTUK VISUALISASI KASUS ABSOLUT ---
+def create_count_bar_chart(df):
+    """Membuat Bar Chart untuk Kasus Absolut."""
+    chart = alt.Chart(df).mark_bar().encode(
+        x=alt.X('PhysicalActivities:N', sort=['No', 'Yes'], title='Aktif Secara Fisik'),
+        y=alt.Y('Case_Count:Q', title='Jumlah Kasus Absolut'),
+        color=alt.Color('PhysicalActivities:N'),
+        tooltip=['PhysicalActivities', 'Total_Population', 'Case_Count']
+    ).properties(
+        title='Perbandingan Jumlah Kasus Serangan Jantung Absolut'
+    ).interactive()
+    
+    return chart
+
 def create_ratio_bar_chart(df):
     """Membuat Bar Chart untuk Rasio Insiden."""
+    
+    # Tambahkan garis horizontal rata-rata Rasio Insiden global
+    mean_ratio = df['Incidence_Ratio (%)'].mean()
     
     chart = alt.Chart(df).mark_bar().encode(
         x=alt.X('PhysicalActivities:N', sort=['No', 'Yes'], title='Aktif Secara Fisik'),
         y=alt.Y('Incidence_Ratio (%):Q', title='Rasio Insiden Serangan Jantung (%)'),
-        color=alt.Color('PhysicalActivities:N'),
+        color=alt.Color('PhysicalActivities:N', legend=None),
         tooltip=['PhysicalActivities', 'Total_Population', 'Case_Count', alt.Tooltip('Incidence_Ratio (%)', format='.2f')]
     ).properties(
-        title='Perbandingan Rasio Insiden Serangan Jantung Berdasarkan Aktivitas Fisik'
+        title='Perbandingan Rasio Insiden (Risiko Relatif)'
     ).interactive()
     
-    return chart
+    # Tambahkan garis rata-rata
+    line = alt.Chart(pd.DataFrame({'y': [mean_ratio]})).mark_rule(color='red').encode(y='y')
+    
+    return chart + line
+
 
 def show_page():
     """Menampilkan konten lengkap Study Case 8."""
@@ -48,9 +69,19 @@ def show_page():
     st.header("Study Case 8: Aktivitas Fisik vs. Risiko Serangan Jantung")
     st.markdown("---")
     
-    # 1. Visualisasi Rasio Insiden
-    st.subheader("1. Rasio Insiden (Risiko Relatif) per Kelompok Populasi")
-    st.altair_chart(create_ratio_bar_chart(df_activity_risk), use_container_width=True) 
+    # 1. Visualisasi Berdampingan (Kasus Absolut vs. Rasio Insiden)
+    st.subheader("1. Membandingkan Beban Kasus Absolut dan Rasio Insiden")
+    
+    col_count_chart, col_ratio_chart = st.columns(2)
+    
+    with col_count_chart:
+        st.altair_chart(create_count_bar_chart(df_activity_risk), use_container_width=True)
+        st.caption("Visualisasi ini menunjukkan **Kasus Absolut**.")
+        
+    with col_ratio_chart:
+        st.altair_chart(create_ratio_bar_chart(df_activity_risk), use_container_width=True)
+        st.caption("Visualisasi ini menunjukkan **Rasio Insiden (Risiko Relatif)**.")
+
 
     # 2. Data Rinci
     st.subheader("2. Data Rinci Rasio Insiden")
@@ -58,33 +89,30 @@ def show_page():
     
     # 3. Interpretasi dan Penjelasan Detail
     st.subheader("3. Interpretasi dan Kesimpulan")
-
-    st.markdown("""
+    
+    st.markdown(f"""
         ### Analisis Perbandingan: Kasus Absolut vs. Rasio Insiden
 
-        Data absolut menunjukkan bahwa jumlah kasus serangan jantung lebih banyak terjadi pada kelompok **Aktif Secara Fisik** (≈8.514 kasus) dibandingkan dengan kelompok **Tidak Aktif Secara Fisik** (≈4.921 kasus). Namun, nilai absolut ini **tidak memperhitungkan perbedaan jumlah populasi** di tiap kelompok.
-
-        #### Temuan Kunci: Rasio Insiden
-        Rasio insiden digunakan untuk menilai **risiko relatif** dengan menormalkan jumlah kasus terhadap total populasi tiap kelompok, menggunakan rumus:
+        1. **Kasus Absolut:** Grafik Kiri (Jumlah Kasus Absolut) menunjukkan bahwa kelompok **Aktif Secara Fisik** memiliki kasus lebih banyak (**{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'Yes']['Case_Count'].iloc[0]:.0f} kasus**) dibandingkan kelompok **Tidak Aktif Secara Fisik** (**{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'No']['Case_Count'].iloc[0]:.0f} kasus**).
+        2. **Populasi:** Hal ini disebabkan karena **populasi responden yang Aktif Secara Fisik JAUH lebih besar** (**{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'Yes']['Total_Population'].iloc[0]:,.0f} orang**) dibandingkan yang Tidak Aktif (**{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'No']['Total_Population'].iloc[0]:,.0f} orang**).
+        
+        #### Temuan Kunci: Rasio Insiden (Risiko Sebenarnya)
+        Rasio insiden digunakan untuk menilai **risiko relatif** dengan menormalkan jumlah kasus terhadap total populasi tiap kelompok:
 
     """)
     st.latex(r"""
         \text{Rasio Insiden} = \frac{\text{Jumlah Kasus Serangan Jantung}}{\text{Total Populasi Kelompok}} \times 100
     """)
 
-    st.markdown("""
+    st.markdown(f"""
         Dari hasil perhitungan:
-        - **Kelompok Tidak Aktif Secara Fisik** memiliki rasio insiden lebih tinggi dibandingkan kelompok aktif.  
-        - Ini menunjukkan bahwa **aktivitas fisik masih berperan sebagai faktor protektif terhadap risiko penyakit jantung**, walaupun jumlah kasus absolut tampak lebih tinggi pada kelompok aktif (karena populasi aktif lebih besar).
-
-        ### Interpretasi Tambahan
-        1. **Perbedaan populasi** sangat berpengaruh — lebih banyak orang aktif secara fisik dalam dataset, sehingga jumlah kasus absolut mereka juga lebih tinggi.  
-        2. **Rasio insiden** memberi gambaran risiko yang sebenarnya: proporsi orang aktif yang terkena serangan jantung lebih kecil daripada yang tidak aktif.  
-        3. **Kualitas aktivitas fisik** juga berperan — aktivitas ringan atau tidak rutin mungkin tidak cukup memberikan efek protektif yang kuat.  
-        4. Terdapat potensi **bias pelaporan** — responden yang sudah memiliki riwayat penyakit jantung bisa mulai lebih aktif setelah sakit (reverse causality).
+        - Rasio Insiden Kelompok **Tidak Aktif Secara Fisik** adalah **{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'No']['Incidence_Ratio (%)'].iloc[0]:.2f}%**.
+        - Rasio Insiden Kelompok **Aktif Secara Fisik** adalah **{df_activity_risk[df_activity_risk['PhysicalActivities'] == 'Yes']['Incidence_Ratio (%)'].iloc[0]:.2f}%**.  
+        
+        Hasil ini menunjukkan bahwa **Kelompok Tidak Aktif Secara Fisik memiliki Rasio Insiden (Risiko) 2 kali lipat lebih tinggi** ({df_activity_risk[df_activity_risk['PhysicalActivities'] == 'No']['Incidence_Ratio (%)'].iloc[0] / df_activity_risk[df_activity_risk['PhysicalActivities'] == 'Yes']['Incidence_Ratio (%)'].iloc[0]:.1f}x) dibandingkan kelompok Aktif.
 
         ### Kesimpulan Akhir
-        - **Secara proporsional**, individu yang **tidak aktif secara fisik** memiliki **risiko serangan jantung lebih tinggi**.  
-        - **Aktivitas fisik** tetap terbukti memiliki efek protektif, tetapi efektivitasnya dapat bervariasi tergantung intensitas dan konsistensinya.  
-        - Pencegahan penyakit jantung perlu bersifat **komprehensif**, mencakup gaya hidup aktif, diet sehat, kontrol stres, dan pemeriksaan medis rutin.
+        - **Secara proporsional**, individu yang **tidak aktif secara fisik** memiliki **risiko serangan jantung JAUH lebih tinggi**.  
+        - **Aktivitas fisik** terbukti memiliki efek protektif (menurunkan risiko), namun pola ini tersembunyi jika hanya melihat jumlah kasus absolut.  
+        - **Pentingnya Normalisasi:** Visualisasi berdampingan ini membuktikan mengapa menggunakan **Rasio Insiden** sangat penting dalam data survei yang memiliki perbedaan besar dalam ukuran populasi antar kelompok.
     """)

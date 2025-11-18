@@ -61,29 +61,21 @@ def create_plotly_map(df):
     return fig
 
 def create_top10_pie_chart(df):
-    """Membuat Pie Chart untuk 10 Negara Bagian Penyumbang Kasus Terbesar."""
+    """Membuat Donut Chart untuk 10 Negara Bagian Penyumbang Kasus Terbesar."""
     
-    # Ambil 10 teratas dan hitung sisanya sebagai 'Lainnya'
+    # Filter hanya 10 negara bagian teratas
     df_top_10 = df.head(10).copy()
     
-    other_cases = df['Count_of_HadHeartAttack'].iloc[10:].sum()
-    other_percent = df['Kontribusi (%)'].iloc[10:].sum()
+    # Hitung total persentase dari top 10
+    total_top_10_percent = df_top_10['Kontribusi (%)'].sum().round(2)
 
-    df_other = pd.DataFrame({
-        'State': ['Lainnya'], 
-        'Kontribusi (%)': [other_percent], 
-        'Count_of_HadHeartAttack': [other_cases]
-    })
-    
-    df_pie = pd.concat([df_top_10, df_other])
-
-    fig = px.pie(df_pie, 
+    fig = px.pie(df_top_10, 
                  values='Kontribusi (%)', 
                  names='State', 
-                 title='Kontribusi Persentase Kasus (Top 10 + Lainnya)',
-                 hole=0.4 # Membuat Donut Chart
+                 title=f'Kontribusi Persentase Kasus (Top 10 Negara Bagian Total: {total_top_10_percent}%)', # Ubah Judul
+                 hole=0.4
     )
-    fig.update_traces(textposition='inside', textinfo='percent+label')
+    fig.update_traces(textposition='inside', textinfo='percent')
     return fig
 
 def show_page():

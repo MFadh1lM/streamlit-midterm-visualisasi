@@ -1,6 +1,6 @@
 import streamlit as st
 # Import fungsi show_page dari setiap file study case
-from pages import sc1_usia, sc2_gender_usia, sc3_sleep_hours, sc4_covid_risk, sc5_alcohol_risk, sc6_smoking, sc7_regional_map, sc8_physical_activity, sc9_diabetes_risk, sc10_stroke_risk, dataset_info
+from pages import sc0_eda_page, sc1_usia, sc2_gender_usia, sc3_sleep_hours, sc4_covid_risk, sc5_alcohol_risk, sc6_smoking, sc7_regional_map, sc8_physical_activity, sc9_diabetes_risk, sc10_stroke_risk, dataset_info
 
 st.set_page_config(
     page_title="Visualisasi Data Midterm",
@@ -12,6 +12,7 @@ def main():
     # 1. Definisikan Struktur Navigasi (PAGES)
     PAGES = {
         "Deskripsi Dataset": dataset_info,
+        "EDA Dataset": sc0_eda_page,
         "1. Usia": sc1_usia,
         "2. Rasio Gender vs Usia": sc2_gender_usia,
         "3. Durasi Tidur": sc3_sleep_hours,
@@ -47,13 +48,13 @@ def main():
         st.subheader("1. Identitas Kelompok")
         st.markdown(
             """
-            | No. | Nama Lengkap | NIM |
-            | :---: | :--- | :--- |
-            | 1 | Muhammad Ma'ruf Firdaus | 1301223001 |
-            | 2 | Muhammad Fadhil Munawwar | 1301223377 |
-            | 3 | I Dewa Putu Rangga Putra Dharma | 1301220427 |
-            | 4 | Fernando Agusti | 1301223388 |
-            | 5 | Nazhmi Ahmad Fauzan | 1301223056 |
+            | No. | Nama Lengkap | NIM | Kontribusi |
+            | :---: | :--- | :--- | :--- |
+            | 1 | Muhammad Ma'ruf Firdaus | 1301223001 | Laporan |
+            | 2 | Muhammad Fadhil Munawwar | 1301223377 | Coding (Website) |
+            | 3 | I Dewa Putu Rangga Putra Dharma | 1301220427 | Laporan |
+            | 4 | Fernando Agusti | 1301223388 | Laporan |
+            | 5 | Nazhmi Ahmad Fauzan | 1301223056 | Laporan |
 
             """
         )

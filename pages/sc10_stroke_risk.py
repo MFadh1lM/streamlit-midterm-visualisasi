@@ -9,7 +9,7 @@ except ImportError:
     DF_FULL = None
 
 if DF_FULL is not None:
-    # --- PROSES DATA (TETAP SAMA) ---
+    # --- PROSES DATA ---
     df_pop = DF_FULL.groupby('HadStroke', as_index=False)['HadHeartAttack'].count().rename(columns={'HadHeartAttack': 'Total_Population'})
     df_cases = DF_FULL[DF_FULL['HadHeartAttack'] == 'Yes'].groupby('HadStroke', as_index=False)['HadHeartAttack'].count().rename(columns={'HadHeartAttack': 'Count_of_HadHeartAttack'})
     df_risk = df_pop.merge(df_cases, on='HadStroke', how='left').fillna(0)
@@ -34,7 +34,9 @@ def create_bar_chart(df):
     chart = alt.Chart(df).mark_bar().encode(
         x=alt.X('Riwayat Stroke:N', sort=stroke_order, title='Riwayat Stroke'),
         y=alt.Y('Count_of_HadHeartAttack:Q', title='Jumlah Kasus Absolut'),
-        color=alt.Color('Riwayat Stroke:N', title='Riwayat Stroke', scale=alt.Scale(range=['#B22222', '#FFD700'])),
+        color=alt.Color('Riwayat Stroke:N', 
+                        scale=alt.Scale(range=['#B22222', '#FF8C00']),
+                        legend=None),
         tooltip=['Riwayat Stroke', 'Count_of_HadHeartAttack', 'Proporsi_Kasus (%)']
     ).properties(
         title='Beban Kasus Serangan Jantung Absolut'
@@ -57,7 +59,7 @@ def create_lollipop_chart(df):
     points = alt.Chart(df).mark_circle(size=200).encode(
         x='Rasio_Insiden (%):Q',
         y=alt.Y('Riwayat Stroke:N', sort=stroke_order),
-        color=alt.Color('Riwayat Stroke:N', legend=None, scale=alt.Scale(range=['#B22222', '#FFD700'])),
+        color=alt.Color('Riwayat Stroke:N', legend=None, scale=alt.Scale(range=['#B22222', '#FF8C00'])),
         tooltip=['Riwayat Stroke', alt.Tooltip('Rasio_Insiden (%)', format='.2f')]
     ).properties(
         title='Risiko Relatif (Rasio Insiden %)'
@@ -107,7 +109,7 @@ def show_page():
         ### Perbandingan Risiko
         
         Hasil ini membuktikan bahwa **individu dengan riwayat stroke memiliki risiko serangan jantung sekitar {risk_factor} kali lipat lebih tinggi** dibandingkan mereka yang tidak memiliki riwayat stroke.
-    
+
         $$\\text{{Faktor Risiko Relatif}} = \\frac{{\\text{{Rasio Insiden}}_{{Stroke}}}}{{\\text{{Rasio Insiden}}_{{Non-Stroke}}}} = \\frac{{{ratio_yes}\\%}}{{{ratio_no}\\%}} \\approx {risk_factor}$$
 
         ---

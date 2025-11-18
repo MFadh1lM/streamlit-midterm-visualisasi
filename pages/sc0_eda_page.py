@@ -117,7 +117,7 @@ def show_page():
     """)
     
     # Sub-point 2.2: Outlier
-    st.markdown("### B. Terdapat Banyak Outlier pada Fitur-Fitur dengan Data Numerik")
+    st.markdown("### B. Terdapat Banyak Outlier pada Fitur-Fitur dengan Data Numerik (Mohon tunggu, loadnya lama)")
     st.markdown("""
         Visualisasi *box plot* menunjukkan adanya **outlier (pencilan) ekstrem** pada hampir semua fitur numerik. Keberadaan outlier ini meningkatkan variabilitas data.
     """)

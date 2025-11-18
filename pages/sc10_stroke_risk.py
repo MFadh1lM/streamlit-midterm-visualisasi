@@ -107,7 +107,7 @@ def show_page():
         ### Perbandingan Risiko
         
         Hasil ini membuktikan bahwa **individu dengan riwayat stroke memiliki risiko serangan jantung sekitar {risk_factor} kali lipat lebih tinggi** dibandingkan mereka yang tidak memiliki riwayat stroke.
-
+    
         $$\\text{{Faktor Risiko Relatif}} = \\frac{{\\text{{Rasio Insiden}}_{{Stroke}}}}{{\\text{{Rasio Insiden}}_{{Non-Stroke}}}} = \\frac{{{ratio_yes}\\%}}{{{ratio_no}\\%}} \\approx {risk_factor}$$
 
         ---

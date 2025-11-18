@@ -50,8 +50,8 @@ def main():
             """
             | No. | Nama Lengkap | NIM | Kontribusi |
             | :---: | :--- | :--- | :--- |
-            | 1 | Muhammad Ma'ruf Firdaus | 1301223001 | Laporan |
-            | 2 | Muhammad Fadhil Munawwar | 1301223377 | Coding (Website) |
+            | 1 | Muhammad Ma'ruf Firdaus | 1301223001 | Laporan & EDA |
+            | 2 | Muhammad Fadhil Munawwar | 1301223377 | Coding (Website) & Laporan |
             | 3 | I Dewa Putu Rangga Putra Dharma | 1301220427 | Laporan |
             | 4 | Fernando Agusti | 1301223388 | Laporan |
             | 5 | Nazhmi Ahmad Fauzan | 1301223056 | Laporan |
